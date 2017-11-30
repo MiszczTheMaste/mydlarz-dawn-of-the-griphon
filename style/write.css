@@ -1,0 +1,9 @@
+div > p:not(:first-child)
+{
+    display: none;
+}
+@keyframes type{
+  from { width: 0; }
+}
+@keyframes typeEnd{
+}

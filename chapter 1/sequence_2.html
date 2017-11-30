@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html>
+	<head>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+		<meta charset="UTF-8">
+        <link rel="stylesheet" type="text/css" href="../style/reset.css">
+		<link rel="stylesheet" type="text/css" href="../style/crt.css">
+		<link rel="stylesheet" type="text/css" href="../style/write.css">
+		<link rel="stylesheet" type="text/css" href="../style/generalSequence.css">
+		<script src="../char/traits.js"></script>
+	</head>
+
+	<body onkeydown="skip(event)">
+        <div id="dialogBox" style="width: 100vw; height: 100vh">
+			<p>The street was empty</p>
+			<p>I decided to...</p>
+			<p><span class='button' onclick='nextSky()'>Look at the <span style='color: #98FB98'>sky</span></span></p>
+			<p><span class='button' onclick='next()'>Keep Going</span></p>
+        </div>
+	</body>
+	<script>
+		var dialogBox = document.querySelector("#dialogBox");
+		var textObject = document.getElementsByTagName("p");
+		textObject[0].style.animation = "type "+(String(textObject[0]).length/10)*1+"s steps(60, end)";
+		var index = 0;
+		function skip(key){
+			if(key.keyCode == 27)
+			{
+				textObject[index].style.display = "inline-block";
+				textObject[index].style.animation = 'typeEnd';
+			}
+		}
+		function kutas(){
+		   index++;
+		   textObject[index].style.display = "inline-block";
+		   textObject[index].style.animation = "type "+(String(textObject[index]).length/10)*1+"s steps(60, end)";
+		   textObject[index].addEventListener("animationend",kutas);
+	   	}
+		textObject[index].addEventListener("animationend",kutas);
+		function nextSky()
+		{
+			dialogBox.innerHTML = "";
+			dialogBox.innerHTML += "<p><span style='color: #98FB98'>Sky</span> was painted in <span onclick='this.innerHTML=\"blood\"; this.style.color=\"#8b0000\"'>dark</span></p>";
+			dialogBox.innerHTML += "<p>High above tall buildings</p>";
+			dialogBox.innerHTML += "<p>For second it looked like dawn</p>";
+			dialogBox.innerHTML += "<p><span class='button' onclick='next()'>It's just bombs</span></p>";
+			textObject = document.getElementsByTagName("p");
+			textObject[0].style.animation = "type "+(String(textObject[0]).length/10)*1+"s steps(60, end)";
+			index = 0;
+			textObject[index].addEventListener("animationend",kutas);
+		}
+		function next()
+		{
+			dialogBox.innerHTML = "";
+			dialogBox.innerHTML += "<p>It was getting darker</p>";
+			dialogBox.innerHTML += "<p><span style='color: #556b2F'>They</span> said that I should move in the night</p>";
+			dialogBox.innerHTML += "<p>That way I'll be harder to <span onclick='this.innerHTML=\"kill\"; this.style.color=\"#8b0000\"'>track</span></p>";
+			dialogBox.innerHTML += "<p><span class='button' onclick='next2()'>Better to bring out portable <span style='color: #EE7600'>light</span></span></p>";
+			textObject = document.getElementsByTagName("p");
+			textObject[0].style.animation = "type "+(String(textObject[0]).length/10)*1+"s steps(60, end)";
+			index = 0;
+			textObject[index].addEventListener("animationend",kutas);
+		}
+		function next2()
+		{
+			dialogBox.innerHTML = "";
+			dialogBox.innerHTML += "<p>It's chemical based</p>";
+			dialogBox.innerHTML += "<p>Weighs so little</p>";
+			dialogBox.innerHTML += "<p><span class='button' onclick='nextLight()'>I'll check if it works</span></p>";
+			dialogBox.innerHTML += "<p><span class='button' onclick='nextDark()'>I prefer darkness</span></p>";
+			textObject = document.getElementsByTagName("p");
+			textObject[0].style.animation = "type "+(String(textObject[0]).length/10)*1+"s steps(60, end)";
+			index = 0;
+			textObject[index].addEventListener("animationend",kutas);
+		}
+		function nextLight()
+		{
+			hope += 1;
+			lightOn();
+			dialogBox.innerHTML = "";
+			dialogBox.innerHTML += "<p>Works perfectly</p>";
+			dialogBox.innerHTML += "<p><span class='button' onclick='next3()'>I <span style='color:#EE7600'>hope</span> that it will not break too soon</span></p>";
+			textObject = document.getElementsByTagName("p");
+			textObject[0].style.animation = "type "+(String(textObject[0]).length/10)*1+"s steps(60, end)";
+			index = 0;
+			textObject[index].addEventListener("animationend",kutas);
+		}
+
+		function nextDark()
+		{
+			melancholy += 1;
+			dialogBox.innerHTML = "";
+			dialogBox.innerHTML += "<p>I always <span onclick='this.innerHTML=\"respected\"; this.style.color=\"#BFEFFF\"'>enjoyed</span> twilight</p>";
+			dialogBox.innerHTML += "<p>One step further</p>";
+			dialogBox.innerHTML += "<p>Comes <span style='color:#7851a9' onclick='this.innerHTML=\"dreadful\"; this.style.color=\"#BFEFFF\"'>wonderful</span> lady</p>";
+			dialogBox.innerHTML += "<p><span class='button' onclick='next3()'>Abyss <span style='color:#8b0000'>awaits</span></span></p>";
+			textObject = document.getElementsByTagName("p");
+			textObject[0].style.animation = "type "+(String(textObject[0]).length/10)*1+"s steps(60, end)";
+			index = 0;
+			textObject[index].addEventListener("animationend",kutas);
+		}
+		function next3()
+		{
+			lightOff();
+			dialogBox.innerHTML = "";
+			dialogBox.innerHTML += "<p>Now I stand at the crossroad</p>";
+			dialogBox.innerHTML += "<p>Two big ground level arterial roads</p>";
+			dialogBox.innerHTML += "<p><span class='button' onclick='nextWonder()'>I wonder how busy was that city</span></p>";
+			dialogBox.innerHTML += "<p><a href='sequence_3.html'>Let's check the map</a></p>";
+			textObject = document.getElementsByTagName("p");
+			textObject[0].style.animation = "type "+(String(textObject[0]).length/10)*1+"s steps(60, end)";
+			index = 0;
+			textObject[index].addEventListener("animationend",kutas);
+		}
+		function nextWonder()
+		{
+			imagination += 1;
+			dialogBox.innerHTML = "";
+			dialogBox.innerHTML += "<p style='font-style:italic'>A lot of vehicles are going down the street</p>";
+			dialogBox.innerHTML += "<p style='font-style:italic'><span style='color:#8b4513'>People</span> are trapped inside them</p>";
+			dialogBox.innerHTML += "<p style='font-style:italic'>Everyone is nervous</p>";
+			dialogBox.innerHTML += "<p style='font-style:italic'>I can feel <span onclick='this.innerHTML=\"death\"; this.style.color=\"#8b0000\"'>something <span style='color:#8b0000'>wrong</span></span> in thick air</p>";
+		 	dialogBox.innerHTML += "<p style='font-style:italic'><span onclick='this.innerHTML=\"Mother\";'>Somebody</span> scream about <span style='color:#fc5f5f' onclick='this.innerHTML=\"keep living\"';>something</span> to <span onclick='this.innerHTML=\"son\";'>somebody</span></p>";
+			dialogBox.innerHTML += "<p><a href='sequence_3.html'>I should focus on reality</a></p>";
+			textObject = document.getElementsByTagName("p");
+			textObject[0].style.animation = "type "+(String(textObject[0]).length/10)*1+"s steps(60, end)";
+			index = 0;
+			textObject[index].addEventListener("animationend",kutas);
+		}
+	</script>
+</html>

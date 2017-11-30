@@ -1,0 +1,860 @@
+<!DOCTYPE html>
+<html>
+	<head>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+        <meta charset="UTF-8">
+        <link rel="stylesheet" type="text/css" href="../style/reset.css">
+		<link rel="stylesheet" type="text/css" href="../style/crt.css">
+		<link rel="stylesheet" type="text/css" href="../style/write.css">
+		<link rel="stylesheet" type="text/css" href="../style/generalSequence.css">
+		<script src="../char/traits.js"></script>
+	</head>
+
+	<body onkeydown="skip(event)">
+        <div id="dialogBox" style="width: 100vw; height: 100vh">
+            <p>I have unfolded map on the table</p>
+			<p>My rifle stood next to me</p>
+			<p>leaning against the table</p>
+			<p>I think I saw something shining on the floor</p>
+			<p><span class='button' onclick='next()'>Anyways, back to the map</span></p>
+        </div>
+	</body>
+	<script>
+		var dialogBox = document.querySelector("#dialogBox");
+		var textObject = document.getElementsByTagName("p");
+		textObject[0].style.animation = "type "+(String(textObject[0]).length/10)*1+"s steps(60, end)";
+		var index = 0;
+		function skip(key){
+			if(key.keyCode == 27)
+			{
+				textObject[index].style.display = "inline-block";
+				textObject[index].style.animation = 'typeEnd';
+			}
+		}
+		function kutas(){
+		   index++;
+		   textObject[index].style.display = "inline-block";
+		   textObject[index].style.animation = "type "+(String(textObject[index]).length/10)*1+"s steps(60, end)";
+		   textObject[index].addEventListener("animationend",kutas);
+	   	}
+		textObject[index].addEventListener("animationend",kutas);
+		var backAlleys, flats, tall, transmitters, floor = 0;
+		var check = 0;
+		var timePassed = 0;
+		function rng(min,max)
+		{
+		    return Math.floor(Math.random()*(max-min+1)+min);
+		}
+		function next()
+		{
+			dialogBox.innerHTML = "";
+			dialogBox.innerHTML += "<p>On table lay map with marked places</p>";
+			if(thomasLasky.alive == true && backAlleys){
+				dialogBox.innerHTML += "<p>Soldier rest on bed made of old clothes</p>";
+				dialogBox.innerHTML += "<p><span class='button' onclick='thomasCheck()'>Check his condition</span></p>";
+			}
+			if(firstTarget != "dead" && firstTarget != "mercy"){
+				dialogBox.innerHTML += "<p><span class='button' onclick='nextTall()'>Let's check the tallest one first</span></p>";
+				dialogBox.innerHTML += "<p><span class='button' onclick='nextTransmitters()'>Hmm... that one marked 'transmitters'</span></p>";
+				dialogBox.innerHTML += "<p><span class='button' onclick='nextSquare()'>Maybe flats next to the square</span></p>";
+				if(!backAlleys){
+					dialogBox.innerHTML += "<p><span class='button' onclick='nextBackAlleys()'>Back alleys sounds like place I need to check</span></p>";
+				}
+				dialogBox.innerHTML += "<p><span class='button' onclick='nextWeapon()'>Examine weapon</span></p>";
+				if(!floor){
+					dialogBox.innerHTML += "<p><span class='button' onclick='nextFloor()'>What is shining on the floor?</span></p>";
+				}
+				if(check == 2){
+					dialogBox.innerHTML += "<p><span class='button' onclick='nextDanger()'>Is somebody out there?</span></p>";
+				}
+				if(thomasLasky.alive && backAlleys){
+					dialogBox.innerHTML += "<p><span class='button' onclick='next(); timePassed += 1'>Wait for some time</span></p>";
+				}
+			}
+			else{
+				dialogBox.innerHTML += "<p><span class='button' onclick='nextMove()'>Time to move I guess</span></p>";
+			}
+			textObject = document.getElementsByTagName("p");
+			textObject[0].style.animation = "type "+(String(textObject[0]).length/10)*1+"s steps(60, end)";
+			index = 0;
+			textObject[index].addEventListener("animationend",kutas);
+		}
+		function nextMove(){
+			dialogBox.innerHTML = '';
+			if(thomasLasky.alive == true && backAlleys){
+				dialogBox.innerHTML += "<p><span style='font-style:italic'>Wounded soldier rest</span></p>";
+				dialogBox.innerHTML += "<p><a href='sequence_6.html' onclick='hope += 10'>I need to takie him with me</a></p>";
+				dialogBox.innerHTML += "<p><a href='sequence_6.html' onclick='thomasLasky.alive = false; apathy += 20'>He will only slow me down</a></p>";
+			}
+			dialogBox.innerHTML += "<p><a href='sequence_6.html'>Nothing keeps me here</a></p>";
+			textObject = document.getElementsByTagName("p");
+			textObject[0].style.animation = "type "+(String(textObject[0]).length/10)*1+"s steps(60, end)";
+			index = 0;
+			textObject[index].addEventListener("animationend",kutas);
+		}
+		function nextSquare(){
+			check += 1;
+			dialogBox.innerHTML = "";
+			dialogBox.innerHTML += "<p><span style='font-style:italic'>Small square looks empty</span></p>";
+			dialogBox.innerHTML += "<p><span style='font-style:italic'>On the right stands big residential building</span></p>";
+			dialogBox.innerHTML += "<p><span style='font-style:italic'>with shopping centre on opposite side</span></p>";
+			dialogBox.innerHTML += "<p><span style='font-style:italic'><span style='color:#8b0000'>Small figure</span> moved around doors to flats</span></p>";
+			dialogBox.innerHTML += "<p><span style='font-style:italic'>After taking a look it was clear</span></p>";
+			dialogBox.innerHTML += "<p><span style='font-style:italic' onclick=this.innerHTML=\"target\"; this.style.color=\"#8b0000\"><span style='color:#cdad00'>Elven</span> <span style='color:#8b0000'>soldier</span></span></p>";
+			dialogBox.innerHTML += "<p><span class='button' onclick='nextSquareKill()'>So... That what I should <span style='color:#8b0000'>do</span></span></p>";
+			dialogBox.innerHTML += "<p><span class='button' onclick='nextSquare2()'>No, no, no. Sneak around</span></p>";
+			textObject = document.getElementsByTagName("p");
+			textObject[0].style.animation = "type "+(String(textObject[0]).length/10)*1+"s steps(60, end)";
+			index = 0;
+			textObject[index].addEventListener("animationend",kutas);
+		}
+		function nextSquare2(){
+			check += 1;
+			dialogBox.innerHTML = "";
+			dialogBox.innerHTML += "<p>That wasn't too hard</p>";
+			dialogBox.innerHTML += "<p>But here came another problem</p>";
+			dialogBox.innerHTML += "<p>What even I'm looking for</p>";
+			dialogBox.innerHTML += "<p><span class='button' onclick='nextSquareFloor()'>Guess I need to walk around with gun</span></p>";
+			textObject = document.getElementsByTagName("p");
+			textObject[0].style.animation = "type "+(String(textObject[0]).length/10)*1+"s steps(60, end)";
+			index = 0;
+			textObject[index].addEventListener("animationend",kutas);
+		}
+		function nextSquareFloor(){
+			check += 1;
+			dialogBox.innerHTML = "";
+			dialogBox.innerHTML += "<p><span style='font-style:italic'>Corridor with flats 250-255</span></p>";
+			dialogBox.innerHTML += "<p>Let's check number...</p>";
+			dialogBox.innerHTML += "<p><span class='button' onclick='nextSquareFloor250()'>250</span></p>";
+			dialogBox.innerHTML += "<p><span class='button' onclick='nextSquareFloor251()'>251</span></p>";
+			dialogBox.innerHTML += "<p><span class='button' onclick='nextSquareFloor252()'>252</span></p>";
+			dialogBox.innerHTML += "<p><span class='button' onclick='nextSquareFloor253()'>253</span></p>";
+			dialogBox.innerHTML += "<p><span class='button' onclick='nextSquareFloor254()'>254</span></p>";
+			dialogBox.innerHTML += "<p><span class='button' onclick='nextSquareFloor255()'>255</span></p>";
+			dialogBox.innerHTML += "<p><span class='button' onclick='next()'>Nothing to see here</span></p>";
+			textObject = document.getElementsByTagName("p");
+			textObject[0].style.animation = "type "+(String(textObject[0]).length/10)*1+"s steps(60, end)";
+			index = 0;
+			textObject[index].addEventListener("animationend",kutas);
+		}
+		function nextSquareFloor250(){
+			check += 1;
+			dialogBox.innerHTML = "";
+			dialogBox.innerHTML += "<p><span style='font-style:italic'>Two beds</span></p>";
+			dialogBox.innerHTML += "<p><span style='font-style:italic'>one table</span></p>";
+			dialogBox.innerHTML += "<p><span style='font-style:italic'>tree chairs</span></p>";
+			dialogBox.innerHTML += "<p><span style='font-style:italic'>toilet</span></p>";
+			dialogBox.innerHTML += "<p><span style='font-style:italic'>small kitchen</span></p>";
+			dialogBox.innerHTML += "<p><span class='button' onclick='nextSquareFloor()'>...</span></p>";
+			textObject = document.getElementsByTagName("p");
+			textObject[0].style.animation = "type "+(String(textObject[0]).length/10)*1+"s steps(60, end)";
+			index = 0;
+			textObject[index].addEventListener("animationend",kutas);
+		}
+		function nextSquareFloor251(){
+			check += 1;
+			dialogBox.innerHTML = "";
+			dialogBox.innerHTML += "<p><span style='font-style:italic'>Office furniture</span></p>";
+			dialogBox.innerHTML += "<p><span style='font-style:italic'>posters on wall</span></p>";
+			dialogBox.innerHTML += "<p><span style='font-style:italic'>rectangular stain</span></p>";
+			dialogBox.innerHTML += "<p><span style='font-style:italic'>walls were destroyed to buildd one big room</span></p>";
+			dialogBox.innerHTML += "<p><span class='button' onclick='nextSquareFloor()'>...</span></p>";
+			textObject = document.getElementsByTagName("p");
+			textObject[0].style.animation = "type "+(String(textObject[0]).length/10)*1+"s steps(60, end)";
+			index = 0;
+			textObject[index].addEventListener("animationend",kutas);
+		}
+		function nextSquareFloor252(){
+			check += 1;
+			dialogBox.innerHTML = "";
+			dialogBox.innerHTML += "<p><span style='font-style:italic'>Crates</span></p>";
+			dialogBox.innerHTML += "<p><span style='font-style:italic'>boxes</span></p>";
+			dialogBox.innerHTML += "<p><span style='font-style:italic'>items left in mess</span></p>";
+			dialogBox.innerHTML += "<p><span style='font-style:italic'>documents lay on provisional table</span></p>";
+			dialogBox.innerHTML += "<p><span class='button' onclick='nextSquareFloor()'>...</span></p>";
+			textObject = document.getElementsByTagName("p");
+			textObject[0].style.animation = "type "+(String(textObject[0]).length/10)*1+"s steps(60, end)";
+			index = 0;
+			textObject[index].addEventListener("animationend",kutas);
+		}
+		function nextSquareFloor253(){
+			check += 1;
+			dialogBox.innerHTML = "";
+			dialogBox.innerHTML += "<p><span style='font-style:italic'>Bed</span></p>";
+			dialogBox.innerHTML += "<p><span style='font-style:italic'>some cabinets</span></p>";
+			dialogBox.innerHTML += "<p><span style='font-style:italic'>fitness corner</span></p>";
+			dialogBox.innerHTML += "<p><span style='font-style:italic'>photos of trees on the wall</span></p>";
+			dialogBox.innerHTML += "<p><span class='button' onclick='nextSquareFloor()'>...</span></p>";
+			textObject = document.getElementsByTagName("p");
+			textObject[0].style.animation = "type "+(String(textObject[0]).length/10)*1+"s steps(60, end)";
+			index = 0;
+			textObject[index].addEventListener("animationend",kutas);
+		}
+		function nextSquareFloor254(){
+			check += 1;
+			dialogBox.innerHTML = "";
+			dialogBox.innerHTML += "<p><span style='font-style:italic'>Broken chairs</span></p>";
+			dialogBox.innerHTML += "<p><span style='font-style:italic'>tossed away lamp</span></p>";
+			dialogBox.innerHTML += "<p><span style='font-style:italic' onclick='nextSquareFloor254Bookcase()'>big bookcase</span></p>";
+			dialogBox.innerHTML += "<p><span style='font-style:italic'>everything elese was broken or left in chaos</span></p>";
+			dialogBox.innerHTML += "<p><span style='font-style:italic'>bit smaller from inside</span></p>";
+			dialogBox.innerHTML += "<p><span class='button' onclick='nextSquareFloor()'>...</span></p>";
+			textObject = document.getElementsByTagName("p");
+			textObject[0].style.animation = "type "+(String(textObject[0]).length/10)*1+"s steps(60, end)";
+			index = 0;
+			textObject[index].addEventListener("animationend",kutas);
+		}
+		function nextSquareFloor254Bookcase(){
+			check += 1;
+			dialogBox.innerHTML = "";
+			dialogBox.innerHTML += "<p>This don't belong here</p>";
+			dialogBox.innerHTML += "<p>I'm more than sure that somebody placed it on purpose</p>";
+			dialogBox.innerHTML += "<p><span class='button' onclick='nextSquareFloorHQ()'>Move it</span></p>";
+			textObject = document.getElementsByTagName("p");
+			textObject[0].style.animation = "type "+(String(textObject[0]).length/10)*1+"s steps(60, end)";
+			index = 0;
+			textObject[index].addEventListener("animationend",kutas);
+		}
+		function nextSquareFloorHQ(){
+			check += 1;
+			dialogBox.innerHTML = "";
+			dialogBox.innerHTML += "<p><span style='font-style:italic'>Behind was located another room</span></p>";
+			dialogBox.innerHTML += "<p><span style='font-style:italic'>Inside sat <span style='color:#cdad00'>soldier</span></span></p>";
+			dialogBox.innerHTML += "<p><span style='font-style:italic'>He beared a lot of badges</span></p>";
+			dialogBox.innerHTML += "<p><span style='font-style:italic'>and didn't notice somebody entered his place</span></p>";
+			dialogBox.innerHTML += "<p><span style='font-style:italic'>Devices standing on table fully absorbed his attention</span></p>";
+			dialogBox.innerHTML += "<p><span class='button' onclick='nextSquareFloorHQkill()'>Shoot</span></p>";
+			dialogBox.innerHTML += "<p><span class='button' onclick='nextSquareFloorHQtalk()'>You freeze!</span></p>";
+			textObject = document.getElementsByTagName("p");
+			textObject[0].style.animation = "type "+(String(textObject[0]).length/10)*1+"s steps(60, end)";
+			index = 0;
+			textObject[index].addEventListener("animationend",kutas);
+		}
+		function nextSquareFloor254Bookcase(){
+			check += 1;
+			dialogBox.innerHTML = "";
+			dialogBox.innerHTML += "<p>This don't belong here</p>";
+			dialogBox.innerHTML += "<p>I'm more than sure that somebody placed it on purpose</p>";
+			dialogBox.innerHTML += "<p><span class='button' onclick='nextSquareFloorHQ()'>Move it</span></p>";
+			textObject = document.getElementsByTagName("p");
+			textObject[0].style.animation = "type "+(String(textObject[0]).length/10)*1+"s steps(60, end)";
+			index = 0;
+			textObject[index].addEventListener("animationend",kutas);
+		}
+		function nextSquareFloorHQtalk(){
+			check += 1;
+			dialogBox.innerHTML = "";
+			dialogBox.innerHTML += "<p>Not even try to move</p>";
+			dialogBox.innerHTML += "<p><span style='font-style:italic'>Realisation hitted officer</span></p>";
+			dialogBox.innerHTML += "<p><span style='font-style:italic'>He tried to explain</span></p>";
+			dialogBox.innerHTML += "<p><span style='font-style:italic'>say something</span></p>";
+			dialogBox.innerHTML += "<p>It would be great if I could understandd your language</p>";
+			dialogBox.innerHTML += "<p><span class='button' onclick='nextSquareFloorHQkill()'>But I don't want to</span></p>";
+			dialogBox.innerHTML += "<p><span class='button' onclick='nextSquareFloorHQmercy()'>No I... No</span></p>";
+			textObject = document.getElementsByTagName("p");
+			textObject[0].style.animation = "type "+(String(textObject[0]).length/10)*1+"s steps(60, end)";
+			index = 0;
+			textObject[index].addEventListener("animationend",kutas);
+		}
+		function nextSquareFloorHQmercy(){
+			check += 1;
+			hope += 15;
+			apathy -= 10;
+			firstTarget = 'mercy';
+			dialogBox.innerHTML = "";
+			dialogBox.innerHTML += "<p>Don't try</p>";
+			dialogBox.innerHTML += "<p>I</p>";
+			dialogBox.innerHTML += "<p>won't</p>";
+			dialogBox.innerHTML += "<p>kill</p>";
+			dialogBox.innerHTML += "<p>you</p>";
+			dialogBox.innerHTML += "<p>I'll just destroy your weird machines</p>";
+			dialogBox.innerHTML += "<p><span style='font-style:italic'>Officer seemed to understand</span></p>";
+			dialogBox.innerHTML += "<p><span class='button' onclick='next()'>Great now I gonna go</span></p>";
+			textObject = document.getElementsByTagName("p");
+			textObject[0].style.animation = "type "+(String(textObject[0]).length/10)*1+"s steps(60, end)";
+			index = 0;
+			textObject[index].addEventListener("animationend",kutas);
+		}
+		function nextSquareFloorHQkill(){
+			check += 1;
+			apathy += 10;
+			melancholy += 10;
+			firstTarget = 'dead';
+			dialogBox.innerHTML = "";
+			dialogBox.innerHTML += "<p><span style='font-style:italic'>His body <span style='color:#8b0000'>disassembled</span> with contact of hot bullet</span></p>";
+			dialogBox.innerHTML += "<p>Didn't even hadd chance to say last word</p>";
+			dialogBox.innerHTML += "<p><span class='button' onclick='next()'>...</span></p>";
+			textObject = document.getElementsByTagName("p");
+			textObject[0].style.animation = "type "+(String(textObject[0]).length/10)*1+"s steps(60, end)";
+			index = 0;
+			textObject[index].addEventListener("animationend",kutas);
+		}
+		function nextSquareFloor255(){
+			check += 1;
+			dialogBox.innerHTML = "";
+			dialogBox.innerHTML += "<p><span style='font-style:italic'>Beds</span></p>";
+			dialogBox.innerHTML += "<p><span style='font-style:italic'>tables, chairs</span></p>";
+			dialogBox.innerHTML += "<p><span style='font-style:italic'>cutlery</span></p>";
+			dialogBox.innerHTML += "<p><span style='font-style:italic'>like owners walked away five minutes before</span></p>";
+			dialogBox.innerHTML += "<p><span class='button' onclick='nextSquareFloor()'>...</span></p>";
+			textObject = document.getElementsByTagName("p");
+			textObject[0].style.animation = "type "+(String(textObject[0]).length/10)*1+"s steps(60, end)";
+			index = 0;
+			textObject[index].addEventListener("animationend",kutas);
+		}
+		function nextSquareKill(){
+			check += 1;
+			dialogBox.innerHTML = "";
+			dialogBox.innerHTML += "<p><span style='font-style:italic'>Shoot</span></p>";
+			dialogBox.innerHTML += "<p><span style='font-style:italic'>little man <span style='color:#8b0000'>falls</span> on the ground</span></p>";
+			dialogBox.innerHTML += "<p>I feel <span onclick=this.innerHTML=\"power\"; this.style.color=\"#8b0000\">something</span></p>";
+			dialogBox.innerHTML += "<p><span style='font-style:italic'>Far away light flickered</span></p>";
+			dialogBox.innerHTML += "<p>Wait</p>";
+			dialogBox.innerHTML += "<p>It's not right</p>";
+			dialogBox.innerHTML += "<p>I feel something more</p>";
+			dialogBox.innerHTML += "<p>Is that blood on my hand</p>";
+			dialogBox.innerHTML += "<p><span class='button' onclick='die()'>My own...</span></p>";
+			textObject = document.getElementsByTagName("p");
+			textObject[0].style.animation = "type "+(String(textObject[0]).length/10)*1+"s steps(60, end)";
+			index = 0;
+			textObject[index].addEventListener("animationend",kutas);
+		}
+		function nextTall(){
+			check += 1;
+			dialogBox.innerHTML = "";
+			dialogBox.innerHTML += "<p><span style='font-style:italic'>Great tower was high as the sky</span></p>";
+			dialogBox.innerHTML += "<p><span style='font-style:italic'>It took the most damage of all buildings</span></p>";
+			dialogBox.innerHTML += "<p><span style='font-style:italic'>Doors guarding the enterance were open</span></p>";
+			dialogBox.innerHTML += "<p><span class='button' onclick='nextTall2()'>Let's go inside</span></p>";
+			textObject = document.getElementsByTagName("p");
+			textObject[0].style.animation = "type "+(String(textObject[0]).length/10)*1+"s steps(60, end)";
+			index = 0;
+			textObject[index].addEventListener("animationend",kutas);
+		}
+		function nextTall2(){
+			check += 1;
+			dialogBox.innerHTML = "";
+			dialogBox.innerHTML += "<p><span style='font-style:italic'>Reception was modestly decorated</span></p>";
+			dialogBox.innerHTML += "<p><span style='font-style:italic'>Unlike in the restaurant here nothing was left on the ground</span></p>";
+			dialogBox.innerHTML += "<p><span style='font-style:italic'>Staff doors were tightly closed</span></p>";
+			dialogBox.innerHTML += "<p><span style='font-style:italic'>Only way to penetrate the building were...</span></p>";
+			dialogBox.innerHTML += "<p><span class='button' onclick='nextTall3()'>... stairs</span></p>";
+			textObject = document.getElementsByTagName("p");
+			textObject[0].style.animation = "type "+(String(textObject[0]).length/10)*1+"s steps(60, end)";
+			index = 0;
+			textObject[index].addEventListener("animationend",kutas);
+		}
+		function nextTall3(){
+			check += 1;
+			fear += 5;
+			dialogBox.innerHTML = "";
+			dialogBox.innerHTML += "<p>Even with rifle in my hands</p>";
+			dialogBox.innerHTML += "<p> ground on which I stepped felt</p>";
+			dialogBox.innerHTML += "<p>uncertain</p>";
+			dialogBox.innerHTML += "<p><span class='button' onclick='next()'>Go back</span></p>";
+			dialogBox.innerHTML += "<p><span class='button' onclick='nextTall4()'>Should it be normal feeling in my situation?</span></p>";
+			textObject = document.getElementsByTagName("p");
+			textObject[0].style.animation = "type "+(String(textObject[0]).length/10)*1+"s steps(60, end)";
+			index = 0;
+			textObject[index].addEventListener("animationend",kutas);
+		}
+		function nextTall4(){
+			check += 1;
+			fear += 5;
+			dialogBox.innerHTML = "";
+			dialogBox.innerHTML += "<p>Going higher</p>";
+			dialogBox.innerHTML += "<p>and higher</p>";
+			dialogBox.innerHTML += "<p>God I hate stairs</p>";
+			dialogBox.innerHTML += "<p><span style='font-style:italic'>Suddenly everything around started shaking</span></p>";
+			dialogBox.innerHTML += "<p><span style='font-style:italic'>After a while vibration only get stronger</span></p>";
+			dialogBox.innerHTML += "<p><span style='font-style:italic'>Staricase started to fall down</span></p>";
+			dialogBox.innerHTML += "<p><span class='button' onclick='die()'>...</span></p>";
+			textObject = document.getElementsByTagName("p");
+			textObject[0].style.animation = "type "+(String(textObject[0]).length/10)*1+"s steps(60, end)";
+			index = 0;
+			textObject[index].addEventListener("animationend",kutas);
+		}
+		function nextTransmitters(){
+			check += 1;
+			dialogBox.innerHTML = "";
+			dialogBox.innerHTML += "<p>All doors are sealed</p>";
+			dialogBox.innerHTML += "<p>But maybe I should not care about what’s inside</p>";
+			dialogBox.innerHTML += "<p>Only what’s on top of it</p>";
+			dialogBox.innerHTML += "<p><span class='button' onclick='nextTransmitters2()'>I always loved climbing ladders</span></p>";
+			textObject = document.getElementsByTagName("p");
+			textObject[0].style.animation = "type "+(String(textObject[0]).length/10)*1+"s steps(60, end)";
+			index = 0;
+			textObject[index].addEventListener("animationend",kutas);
+		}
+		function nextTransmitters2(){
+			check += 1;
+			dialogBox.innerHTML = "";
+			dialogBox.innerHTML += "<p><span style='font-style:italic'>On the roof stood telecommunications masts</span></p>";
+			dialogBox.innerHTML += "<p><span style='font-style:italic'>Antennas looked quite normal</span></p>";
+			dialogBox.innerHTML += "<p><span style='font-style:italic'>nothing was too new or old</span></p>";
+			dialogBox.innerHTML += "<p><span style='font-style:italic'>Some of wires looked like they were connected</span></p>";
+			dialogBox.innerHTML += "<p><span style='font-style:italic'>straight to wall of residential building</span></p>";
+			dialogBox.innerHTML += "<p><span class='button' onclick='next()'>Seems alright</span></p>";
+			textObject = document.getElementsByTagName("p");
+			textObject[0].style.animation = "type "+(String(textObject[0]).length/10)*1+"s steps(60, end)";
+			index = 0;
+			textObject[index].addEventListener("animationend",kutas);
+		}
+		function thomasCheck(){
+			dialogBox.innerHTML = "";
+			if(timePassed == 0){
+				dialogBox.innerHTML += "<p>He is in deep sleep</p>";
+				dialogBox.innerHTML += "<p><span class='button' onclick='next()'>Gonna leave him for now</span></p>";
+				thomasLasky.hp += 5;
+			}else if(timePassed == 1){
+				thomasLasky.hp += 5;
+				if(thomasLasky.crippled){
+					dialogBox.innerHTML += "<p>His look is not as thankful as i could imagine</p>";
+				}else {
+					dialogBox.innerHTML += "<p>He don't talk much</p>";
+					dialogBox.innerHTML += "<p>In his condition it could have positive effects</p>";
+				}
+				dialogBox.innerHTML += "<p><span class='button' onclick='next()'>Gonna leave him for now</span></p>";
+			}else if(timePassed == 2){
+				thomasLasky.hp += 5;
+				dialogBox.innerHTML += "<p><span class='button' onclick='next()'>Just changing bandages and stuff</span></p>";
+			}else if(timePassed == 3){
+				thomasLasky.hp += 10;
+				dialogBox.innerHTML += "<p>Fever fell a bit</p>";
+				dialogBox.innerHTML += "<p><span class='button' onclick='next()'>I hope everything will be ok</span></p>";
+			}else if(thomasLasky.hp >= 35 && timePassed > 4){
+				dialogBox.innerHTML += "<p>- Thanks</p>";
+				dialogBox.innerHTML += "<p>- Without you I would rot with the rest in that alley</p>";
+				dialogBox.innerHTML += "<p>- Gonna tell you something</p>";
+				dialogBox.innerHTML += "<p>- Near square you have flats</p>";
+				dialogBox.innerHTML += "<p>- 254</p>";
+				dialogBox.innerHTML += "<p>- Behind bookcase</p>";
+				dialogBox.innerHTML += "<p>- You'll find shitface that left me to die</p>";
+				dialogBox.innerHTML += "<p><span class='button' onclick='next()'>...</span></p>";
+			}
+			textObject = document.getElementsByTagName("p");
+			textObject[0].style.animation = "type "+(String(textObject[0]).length/10)*1+"s steps(60, end)";
+			index = 0;
+			textObject[index].addEventListener("animationend",kutas);
+		}
+		function nextFloor()
+		{
+			check += 1;
+			inventory.push(new Array("golden ring", 1));
+			floor = 1;
+			dialogBox.innerHTML = "";
+			dialogBox.innerHTML += "<p>Under pile of broken plates</p>";
+			dialogBox.innerHTML += "<p>lied a ring</p>";
+			dialogBox.innerHTML += "<p>Is it...</p>";
+			dialogBox.innerHTML += "<p>golden?</p>";
+			dialogBox.innerHTML += "<p><span class='button' onclick='next()'>Lucky find</span></p>";
+			textObject = document.getElementsByTagName("p");
+			textObject[0].style.animation = "type "+(String(textObject[0]).length/10)*1+"s steps(60, end)";
+			index = 0;
+			textObject[index].addEventListener("animationend",kutas);
+		}
+		function nextWeapon()
+		{
+			check += 1;
+			dialogBox.innerHTML = "";
+			dialogBox.innerHTML += "<p>It's almost as high as my shoulder</p>";
+			dialogBox.innerHTML += "<p>But surprisingly light</p>";
+			dialogBox.innerHTML += "<p>It looks like hunting rifle, except shorter stock</p>";
+			dialogBox.innerHTML += "<p>When <span style='color: #556B2F'>they</span> gave it to me I have heard a lot about it</p>";
+			dialogBox.innerHTML += "<p>I dont't remember most of it</p>";
+			dialogBox.innerHTML += "<p>But I learned few useful things</p>";
+			dialogBox.innerHTML += "<p>It <span style='color:#8b0000'>shoots</span> really fast and hot particles</p>";
+			dialogBox.innerHTML += "<p>and I mustn't touch anything what is not isolated after firing</p>";
+			dialogBox.innerHTML += "<p>Also somehow one can break safety mechanism, unlocking automatic fire</p>";
+			dialogBox.innerHTML += "<p>Which can lead to reactor <span style='color:#8b0000'>explosion</span></p>";
+			dialogBox.innerHTML += "<p><span class='button' onclick='next()'>Strange machine</span></p>";
+			textObject = document.getElementsByTagName("p");
+			textObject[0].style.animation = "type "+(String(textObject[0]).length/10)*1+"s steps(60, end)";
+			index = 0;
+			textObject[index].addEventListener("animationend",kutas);
+		}
+		function nextDanger()
+		{
+			check += 1;
+			bravery += 1;
+			dialogBox.innerHTML = "";
+			dialogBox.innerHTML += "<p>I went by the doors</p>";
+			dialogBox.innerHTML += "<p>Observation through small gap was problematic</p>";
+			dialogBox.innerHTML += "<p><span class='button' onclick='nextDangerHide()'>I don't want to meet <span style='color:#8b0000'>anyone</span></span></p>";
+			dialogBox.innerHTML += "<p><span class='button' onclick='nextDanger2()'>Door needs to open just a little more</span></p>";
+			textObject = document.getElementsByTagName("p");
+			textObject[0].style.animation = "type "+(String(textObject[0]).length/10)*1+"s steps(60, end)";
+			index = 0;
+			textObject[index].addEventListener("animationend",kutas);
+		}
+		function nextDanger2()
+		{
+			check += 1;
+			bravery += 1;
+			dialogBox.innerHTML = "";
+			dialogBox.innerHTML += "<p><span style='font-style:italic'>Patrol marched down the street</span></p>";
+			dialogBox.innerHTML += "<p><span style='font-style:italic'>They seemed to be going towards the square</span></p>";
+			dialogBox.innerHTML += "<p><span style='font-style:italic'>One of them looked around</span></p>";
+			if(rng(1,3)==1){
+				dialogBox.innerHTML += "<p><span class='button' onclick='die()'>Oh crap</span></p>";
+			}
+			else {
+				dialogBox.innerHTML += "<p><span class='button' onclick='nextDanger3()'>I was left unnoticed</span></p>";
+			}
+			textObject = document.getElementsByTagName("p");
+			textObject[0].style.animation = "type "+(String(textObject[0]).length/10)*1+"s steps(60, end)";
+			index = 0;
+			textObject[index].addEventListener("animationend",kutas);
+		}
+		function nextDanger3()
+		{
+			melancholy += 1;
+			check += 1;
+			dialogBox.innerHTML = "";
+			dialogBox.innerHTML += "<p>They were not <span onclick='this.innerHTML=\"peacekeepers\";' style='color:4556b2f'>soldiers<span> of <span style='color:#ffd700'>All-Commonwealth</span></p>";
+			dialogBox.innerHTML += "<p>Or were <span style='color: #8b0000'>they?</span></p>";
+			dialogBox.innerHTML += "<p><span class='button' onclick='next()'>Did they could harm me?</span></p>";
+			textObject = document.getElementsByTagName("p");
+			textObject[0].style.animation = "type "+(String(textObject[0]).length/10)*1+"s steps(60, end)";
+			index = 0;
+			textObject[index].addEventListener("animationend",kutas);
+		}
+		function nextDangerHide()
+		{
+			fear += 1;
+			bravery -= 1;
+			melancholy += 1;
+			dialogBox.innerHTML = "";
+			dialogBox.innerHTML += "<p><span style='font-style:italic'><span style='color:#0000fa'>Some time</span> later</span></p>";
+			dialogBox.innerHTML += "<p>It's quiet now</p>";
+			dialogBox.innerHTML += "<p><span class='button' onclick='next()'>I think I am safe for now</span></p>";
+			textObject = document.getElementsByTagName("p");
+			textObject[0].style.animation = "type "+(String(textObject[0]).length/10)*1+"s steps(60, end)";
+			index = 0;
+			textObject[index].addEventListener("animationend",kutas);
+		}
+		function nextBackAlleys()
+		{
+			backAlleys = 1;
+			dialogBox.innerHTML = "";
+			dialogBox.innerHTML += "<p>It's still dark outside</p>";
+			dialogBox.innerHTML += "<p>And here its even darker</p>";
+			dialogBox.innerHTML += "<p>Don't think it was brightest idea to go there</p>";
+			dialogBox.innerHTML += "<p><span class='button' onclick='nextBackAlleys2()'>Stick to the plan</span></p>";
+			dialogBox.innerHTML += "<p><span class='button' onclick='nextBackAlleysLight()'>Firstly I'll turn on the light</span></p>";
+			textObject = document.getElementsByTagName("p");
+			textObject[0].style.animation = "type "+(String(textObject[0]).length/10)*1+"s steps(60, end)";
+			index = 0;
+			textObject[index].addEventListener("animationend",kutas);
+		}
+		function nextBackAlleys2()
+		{
+			apathy += 5;
+			dialogBox.innerHTML = "";
+			dialogBox.innerHTML += "<p>Something stinks here</p>";
+			dialogBox.innerHTML += "<p>Kinda sweet but</p>";
+			dialogBox.innerHTML += "<p>like rotting food</p>";
+			dialogBox.innerHTML += "<p>I don't want to know what <span style='color: #8b0000'>is it</span></p>";
+			dialogBox.innerHTML += "<p><span class='button' onclick='nextBackAlleys3()'>Did they gave me gas mask</span></p>";
+			textObject = document.getElementsByTagName("p");
+			textObject[0].style.animation = "type "+(String(textObject[0]).length/10)*1+"s steps(60, end)";
+			index = 0;
+			textObject[index].addEventListener("animationend",kutas);
+		}
+		function nextBackAlleys3()
+		{
+			dialogBox.innerHTML = "";
+			dialogBox.innerHTML += "<p style='font-style: italic'>While wandering the alleys</p>";
+			dialogBox.innerHTML += "<p style='font-style: italic'>something familliar was hearable</p>";
+			dialogBox.innerHTML += "<p style='font-style: italic'>human voice</p>";
+			dialogBox.innerHTML += "<p style='font-style: italic'>calling for help</p>";
+			dialogBox.innerHTML += "<p><span class='button' onclick='lightOn(); nextBackAlleysSoldier()'>I’m coming</span></p>";
+			textObject = document.getElementsByTagName("p");
+			textObject[0].style.animation = "type "+(String(textObject[0]).length/10)*1+"s steps(60, end)";
+			index = 0;
+			textObject[index].addEventListener("animationend",kutas);
+		}
+		function nextBackAlleysLight()
+		{
+			melancholy += 20;
+			fear += 10;
+			apathy += 10;
+			lightOn();
+			dialogBox.innerHTML = "";
+			dialogBox.innerHTML += "<p style='font-style: italic'>Air was filled with reek of <span style='color: #8b0000'>death</span></p>";
+			dialogBox.innerHTML += "<p style='font-style: italic'>Bodies piled up on left an right</p>";
+			dialogBox.innerHTML += "<p style='font-style: italic'>Colors of their skins varied from green and purple to black</p>";
+			dialogBox.innerHTML += "<p style='font-style: italic'>Bloated limbs started to fall off</p>";
+			dialogBox.innerHTML += "<p style='font-style: italic'>Eyeless heads looked into oblivion</p>";
+			dialogBox.innerHTML += "<p style='font-style: italic'>Whole street where flooded with <span style='color: #8b0000' onclick='this.innerHTML=\"fear and gore\";>fluids</span></p>";
+			dialogBox.innerHTML += "<p><span class='button' onclick='nextBackAlleysRun()'>RUN</span></p>";
+			dialogBox.innerHTML += "<p><span class='button' onclick='nextBackAlleysLightNext()'>God... how.. who... why...</span></p>";
+			textObject = document.getElementsByTagName("p");
+			textObject[0].style.animation = "type "+(String(textObject[0]).length/10)*1+"s steps(60, end)";
+			index = 0;
+			textObject[index].addEventListener("animationend",kutas);
+		}
+		function nextBackAlleysRun()
+		{
+			dialogBox.innerHTML = "";
+			dialogBox.innerHTML += "<p style='color: #BFEFFF'>Did</p>";
+			dialogBox.innerHTML += "<p style='color: #BFEFFF'>did I get away</p>";
+			dialogBox.innerHTML += "<p style='color: #BFEFFF'>Were they real?</p>";
+			dialogBox.innerHTML += "<p style='color: #BFEFFF'>Dead</p>";
+			dialogBox.innerHTML += "<p style='color: #BFEFFF'>all of them</p>";
+			dialogBox.innerHTML += "<p style='color: #BFEFFF'>Should I</p>";
+			dialogBox.innerHTML += "<p style='color: #BFEFFF'>make a funeral for them?</p>";
+			dialogBox.innerHTML += "<p style='color: #BFEFFF'>But how</p>";
+			dialogBox.innerHTML += "<p><span class='button' onclick=' lightOff(); next();'>Better to go back to the maps</span></p>";
+			textObject = document.getElementsByTagName("p");
+			textObject[0].style.animation = "type "+(String(textObject[0]).length/10)*1+"s steps(60, end)";
+			index = 0;
+			textObject[index].addEventListener("animationend",kutas);
+		}
+		function nextBackAlleysLightNext()
+		{
+			dialogBox.innerHTML = "";
+			dialogBox.innerHTML += "<p>I-I-I...</p>";
+			dialogBox.innerHTML += "<p style='font-style: italic'>Sounds of vomiting</p>";
+			dialogBox.innerHTML += "<p>What happened where</p>";
+			dialogBox.innerHTML += "<p style='font-style: italic'>Suddenly in dead silence</p>";
+			dialogBox.innerHTML += "<p style='font-style: italic'>new sound was born</p>";
+			dialogBox.innerHTML += "<p style='font-style: italic'>miserable call</p>";
+			dialogBox.innerHTML += "<p style='font-style: italic'>call for help</p>";
+			dialogBox.innerHTML += "<p><span class='button' onclick='nextBackAlleysSoldier()'>Somebody is still <span style='color: #FF4500'>alive</span></span></p>";
+			textObject = document.getElementsByTagName("p");
+			textObject[0].style.animation = "type "+(String(textObject[0]).length/10)*1+"s steps(60, end)";
+			index = 0;
+			textObject[index].addEventListener("animationend",kutas);
+		}
+		function nextBackAlleysSoldier()
+		{
+			dialogBox.innerHTML = "";
+			dialogBox.innerHTML += "<p>Hello?</p>";
+			dialogBox.innerHTML += "<p>- Here, please - <span style='font-style: italic'> said weak voice</span></p>";
+			dialogBox.innerHTML += "<p>Hold on, I'm comming</p>";
+			dialogBox.innerHTML += "<p><span style='font-style: italic'>Man in <span style='color:#556b2f'>military</span> uniform was resting against the wall</span></p>";
+			dialogBox.innerHTML += "<p><span style='font-style: italic'>Ater failed attempt to raise his arm</span></p>";
+			dialogBox.innerHTML += "<p><span style='font-style: italic'>he said one thing:</span></p>";
+			dialogBox.innerHTML += "<p>Can you... solve a riddle?</p>";
+			dialogBox.innerHTML += "<p><span style='font-style: italic'>His leg was black red</span></p>";
+			dialogBox.innerHTML += "<p><span style='font-style: italic'>Second arm tried to cover wound</span></p>";
+			dialogBox.innerHTML += "<p><span class='button' onclick='nextBackAlleysSoldierRiddle()'>A riddle?</span></p>";
+			dialogBox.innerHTML += "<p><span class='button' onclick='nextBackAlleysSoldierClean()'>Have you lost yo...  Come I'll clean this</span></p>";
+			textObject = document.getElementsByTagName("p");
+			textObject[0].style.animation = "type "+(String(textObject[0]).length/10)*1+"s steps(60, end)";
+			index = 0;
+			textObject[index].addEventListener("animationend",kutas);
+		}
+		function nextBackAlleysSoldierRiddle()
+		{
+			dialogBox.innerHTML = "";
+			dialogBox.innerHTML += "<p>- I didn't have <span style='color:#ff4500'>fun</span> for <span style='color:#0000fa'>ages</span></p>";
+			dialogBox.innerHTML += "<p>- Can you fulfill my wish?</p>";
+			dialogBox.innerHTML += "<p><span style='font-style: italic'>Soldier tried to smile</span></p>";
+			dialogBox.innerHTML += "<p><span style='font-style: italic'>Seeing you noticed his <span style='color: #8b0000'>wound</span></span></p>";
+			dialogBox.innerHTML += "<p><span style='font-style: italic'>he covered it with second hand</span></p>";
+			dialogBox.innerHTML += "<p><span class='button' onclick='nextBackAlleysSoldierRiddle2()'>Of course</span></p>";
+			dialogBox.innerHTML += "<p><span class='button' onclick='nextBackAlleysSoldierClean()'>You need immediate treatment</span></p>";
+			dialogBox.innerHTML += "<p><span class='button' onclick='nextBackAlleysSoldierMercy()'>Maybe I could give you <span style='color: #8b0000'>mercy</span></span></p>";
+			textObject = document.getElementsByTagName("p");
+			textObject[0].style.animation = "type "+(String(textObject[0]).length/10)*1+"s steps(60, end)";
+			index = 0;
+			textObject[index].addEventListener("animationend",kutas);
+		}
+		function nextBackAlleysSoldierRiddle2()
+		{
+			hope += 5;
+			dialogBox.innerHTML = "";
+			dialogBox.innerHTML += "<p>- Comes in many colors</p>";
+			dialogBox.innerHTML += "<p>- unwanted to the young</p>";
+			dialogBox.innerHTML += "<p>- greatly welcomed by prepared</p>";
+			dialogBox.innerHTML += "<p>- What is it?</p>";
+			dialogBox.innerHTML += "<p><span class='button' onclick='nextBackAlleysSoldierRiddle3()'>War</span></p>";
+			dialogBox.innerHTML += "<p><span class='button' onclick='nextBackAlleysSoldierRiddle3()'>Pregnancy</span></p>";
+			dialogBox.innerHTML += "<p><span class='button' onclick='nextBackAlleysSoldierRiddle3()'>Future</span></p>";
+			dialogBox.innerHTML += "<p><span class='button' onclick='nextBackAlleysSoldierRiddle3()'>Death</span></p>";
+			dialogBox.innerHTML += "<p><span class='button' onclick='nextBackAlleysSoldierRiddle3()'>Responsibility</span></p>";
+			dialogBox.innerHTML += "<p><span class='button' onclick='nextBackAlleysSoldierRiddle3()'>I don't know</span></p>";
+			textObject = document.getElementsByTagName("p");
+			textObject[0].style.animation = "type "+(String(textObject[0]).length/10)*1+"s steps(60, end)";
+			index = 0;
+			textObject[index].addEventListener("animationend",kutas);
+		}
+		function nextBackAlleysSoldierRiddle3()
+		{
+			dialogBox.innerHTML = "";
+			dialogBox.innerHTML += "<p>- Answer is</p>";
+			dialogBox.innerHTML += "<p>- our certain <span style='color: #8b0000'>death</span></p>";
+			dialogBox.innerHTML += "<p>- Once more?</p>";
+			dialogBox.innerHTML += "<p><span class='button' onclick='nextBackAlleysSoldierClean()'>Now It's time for your wounds</span></p>";
+			dialogBox.innerHTML += "<p><span class='button' onclick='nextBackAlleysSoldierRiddle4()' style='font-style: italic'>Nod</span></p>";
+			textObject = document.getElementsByTagName("p");
+			textObject[0].style.animation = "type "+(String(textObject[0]).length/10)*1+"s steps(60, end)";
+			index = 0;
+			textObject[index].addEventListener("animationend",kutas);
+		}
+		function nextBackAlleysSoldierRiddle4()
+		{
+			dialogBox.innerHTML = "";
+			dialogBox.innerHTML += "<p>- A man lost his son</p>";
+			dialogBox.innerHTML += "<p>- for a long <span style='color: #0000fa'>time</span></p>";
+			dialogBox.innerHTML += "<p>- he coudn't stop him</p>";
+			dialogBox.innerHTML += "<p>- or go after him</p>";
+			dialogBox.innerHTML += "<p>- son never thinked about his father</p>";
+			dialogBox.innerHTML += "<p>- till reunion was certain</p>";
+			dialogBox.innerHTML += "<p>- Who is that son?</p>";
+			dialogBox.innerHTML += "<p><span class='button' onclick='nextBackAlleysSoldierSuicide()'>Is that even a riddle</span></p>";
+			dialogBox.innerHTML += "<p><span class='button' onclick='nextBackAlleysSoldierSuicide()'>No...</span></p>";
+			textObject = document.getElementsByTagName("p");
+			textObject[0].style.animation = "type "+(String(textObject[0]).length/10)*1+"s steps(60, end)";
+			index = 0;
+			textObject[index].addEventListener("animationend",kutas);
+		}
+		function nextBackAlleysSoldierMercy()
+		{
+			apathy += 20;
+			melancholy += 30;
+			dialogBox.innerHTML = "";
+			dialogBox.innerHTML += "<p>- I-I...</p>";
+			dialogBox.innerHTML += "<p><span style='font-style: italic'>He lowered his head</span></p>";
+			dialogBox.innerHTML += "<p><span style='font-style: italic'>tears flowed down his cheeks</span></p>";
+			dialogBox.innerHTML += "<p>- Ple-e-ase</p>";
+			dialogBox.innerHTML += "<p><span style='font-style: italic'>His voice shattered</span></p>";
+			dialogBox.innerHTML += "<p>- Bury like a man</p>";
+			dialogBox.innerHTML += "<p>- please</p>";
+			dialogBox.innerHTML += "<p><span style='font-style: italic'>Following words were silent</span></p>";
+			dialogBox.innerHTML += "<p><span style='font-style: italic'>and their meaning lost</span></p>";
+			dialogBox.innerHTML += "<p><span class='button' onclick='nextBackAlleysSoldierClean(); apathy -= 10;'>No I coudn't</span></p>";
+			dialogBox.innerHTML += "<p><span class='button' onclick='nextBackAlleysSoldierDeath(); lightOff();'>Dream my friend, rough bed</span></p>";
+			textObject = document.getElementsByTagName("p");
+			textObject[0].style.animation = "type "+(String(textObject[0]).length/10)*1+"s steps(60, end)";
+			index = 0;
+			textObject[index].addEventListener("animationend",kutas);
+		}
+		function nextBackAlleysSoldierDeath()
+		{
+			inventory.push({name:"Thomas Lasky's dog tag", amount: 1});
+			thomasLasky.alive = false;
+			apathy += 10;
+			melancholy += 20;
+			dialogBox.innerHTML = "";
+			dialogBox.innerHTML += "<p>maybe I'll see you tommorow</p>";
+			dialogBox.innerHTML += "<p>Dream my friend, 'cause at war</p>";
+			dialogBox.innerHTML += "<p><span class='button' onclick='next()'>only in the grave is peace</span></p>";
+			textObject = document.getElementsByTagName("p");
+			textObject[0].style.animation = "type "+(String(textObject[0]).length/10)*1+"s steps(60, end)";
+			index = 0;
+			textObject[index].addEventListener("animationend",kutas);
+		}
+		function nextBackAlleysSoldierSuicide()
+		{
+			thomasLasky.alive = false;
+			apathy += 20;
+			melancholy += 20;
+			dialogBox.innerHTML = "";
+			dialogBox.innerHTML += "<p><span style='font-style: italic'>Soldier smiled slightly</span></p>";
+			dialogBox.innerHTML += "<p>- It was me</p>";
+			dialogBox.innerHTML += "<p><span style='font-style: italic'>His head dropped powerlessly</span></p>";
+			dialogBox.innerHTML += "<p><span style='font-style: italic'>same as arms</span></p>";
+			dialogBox.innerHTML += "<p><span style='font-style: italic'>In the open hand shined <span style='color: #8b0000'>knife</span></span></p>";
+			dialogBox.innerHTML += "<p>Hey</p>";
+			dialogBox.innerHTML += "<p>Hey</p>";
+			dialogBox.innerHTML += "<p><span style='font-style: italic'>Nobody answered</span></p>";
+			dialogBox.innerHTML += "<p>No, no</p>";
+			dialogBox.innerHTML += "<p>No no no no</p>";
+			dialogBox.innerHTML += "<p><span style='font-style: italic'>Nobody answered</span></p>";
+			dialogBox.innerHTML += "<p>Dear Lord</p>";
+			dialogBox.innerHTML += "<p>I cannot leave him like that</p>";
+			dialogBox.innerHTML += "<p><span class='button' onclick='nextBackAlleysSoldierBurial()'>How can one make a burial</span></p>";
+			textObject = document.getElementsByTagName("p");
+			textObject[0].style.animation = "type "+(String(textObject[0]).length/10)*1+"s steps(60, end)";
+			index = 0;
+			textObject[index].addEventListener("animationend",kutas);
+		}
+		function nextBackAlleysSoldierBurial()
+		{
+			inventory.push({name:"Thomas Lasky's dog tag", amount: 1});
+			apathy += 20;
+			melancholy += 20;
+			dialogBox.innerHTML = "";
+			dialogBox.innerHTML += "<p><span style='font-style: italic; color: #BFFFCD'>Here lies</span></p>";
+			dialogBox.innerHTML += "<p><span style='font-style: italic; color: #BFFFCD'>Covered in old rubbish</span></p>";
+			dialogBox.innerHTML += "<p><span style='font-style: italic; color: #BFFFCD'>Left alone on foreign land</span></p>";
+			dialogBox.innerHTML += "<p><span style='font-style: italic; color: #BFFFCD'>Defender of mankind</span></p>";
+			dialogBox.innerHTML += "<p><span style='font-style: italic; color: #BFFFCD'>Thomas Lasky</span></p>";
+			dialogBox.innerHTML += "<p><span style='font-style: italic;'>Text was engraved in concrete</span></p>";
+			dialogBox.innerHTML += "<p><span style='font-style: italic;'>Above the grave</span></p>";
+			dialogBox.innerHTML += "<p><span style='font-style: italic'>With dog tag in hand Alice sang quiet song:</span></p>";
+			dialogBox.innerHTML += "<p>Dream my friend, rough bed</p>";
+			dialogBox.innerHTML += "<p>maybe I'll see you tommorow</p>";
+			dialogBox.innerHTML += "<p>Dream my friend, 'cause at war</p>";
+			dialogBox.innerHTML += "<p><span class='button' onclick='next();lightOff()'>only in the grave is peace</span></p>";
+			textObject = document.getElementsByTagName("p");
+			textObject[0].style.animation = "type "+(String(textObject[0]).length/10)*1+"s steps(60, end)";
+			index = 0;
+			textObject[index].addEventListener("animationend",kutas);
+		}
+		function nextBackAlleysSoldierClean()
+		{
+			apathy -= 5;
+			dialogBox.innerHTML = "";
+			dialogBox.innerHTML += "<p><span style='font-style: italic;'>With all of his strengh soldier refused</span></p>";
+			dialogBox.innerHTML += "<p><span style='font-style: italic;'>but he was too weak</span></p>";
+			dialogBox.innerHTML += "<p>Hold still</p>";
+			dialogBox.innerHTML += "<p>I won't touch anything only look</p>";
+			dialogBox.innerHTML += "<p><span style='font-style: italic;'>Wound went throught whole left leg</span></p>";
+			dialogBox.innerHTML += "<p><span style='font-style: italic;'>dark as night</span></p>";
+			dialogBox.innerHTML += "<p><span style='font-style: italic;'>internal fluids oozed from injury</span></p>";
+			dialogBox.innerHTML += "<p><span style='font-style: italic'>in some places it looked like maggots started the feast</span></p>";
+			dialogBox.innerHTML += "<p><span class='button' onclick='nextBackAlleysSoldierTheatment();'>We have to do something NOW</span></p>";
+			dialogBox.innerHTML += "<p><span class='button' onclick='nextBackAlleysSoldierAmputate();'>This leg is going away</span></p>";
+			dialogBox.innerHTML += "<p><span class='button' onclick='nextBackAlleysSoldierMercy();'>There is nothing I can do except one <span style='color: #8b0000'>thing</span></span></p>";
+			textObject = document.getElementsByTagName("p");
+			textObject[0].style.animation = "type "+(String(textObject[0]).length/10)*1+"s steps(60, end)";
+			index = 0;
+			textObject[index].addEventListener("animationend",kutas);
+		}
+		function nextBackAlleysSoldierTheatment()
+		{
+			timePassed = 0;
+			apathy -= 5;
+			hope += 5;
+			inventory[2].amount -= 1;
+			dialogBox.innerHTML = "";
+			dialogBox.innerHTML += "<p><span style='font-style: italic;'>Whole process looked grim</span></p>";
+			dialogBox.innerHTML += "<p><span style='font-style: italic;'>Some parts of skin had to be <span style='color: #8b0000'>cut off</span></span></p>";
+			dialogBox.innerHTML += "<p><span style='font-style: italic;'>Maggots were taken out by hand or killed by disinfectants</span></p>";
+			dialogBox.innerHTML += "<p><span style='font-style: italic;'>He had fever, wound was surely infected</span></p>";
+			dialogBox.innerHTML += "<p><span style='font-style: italic;'>Suturing was bigger problem</span></p>";
+			dialogBox.innerHTML += "<p><span style='font-style: italic;'>Wound edges were too damaged for modern methods</span></p>";
+			dialogBox.innerHTML += "<p><span style='font-style: italic;'>By the time bandages were wrapped around</span></p>";
+			dialogBox.innerHTML += "<p><span style='font-style: italic;'>Soldier fell asleep</span></p>";
+			dialogBox.innerHTML += "<p><span class='button' onclick='next(); thomasLasky.alive = 10;lightOff()'>First <span style='color: #fc5f5f'>antibiotics</span>, then you can sleep</span></p>";
+			textObject = document.getElementsByTagName("p");
+			textObject[0].style.animation = "type "+(String(textObject[0]).length/10)*1+"s steps(60, end)";
+			index = 0;
+			textObject[index].addEventListener("animationend",kutas);
+		}
+		function nextBackAlleysSoldierAmputate()
+		{
+			timePassed = 0;
+			apathy -= 5;
+			hope += 5;
+			inventory[2].amount -= 1;
+			dialogBox.innerHTML = "";
+			dialogBox.innerHTML += "<p><span style='font-style: italic;'>With first glance of the knife</span></p>";
+			dialogBox.innerHTML += "<p><span style='font-style: italic;'>brave soldier passed out</span></p>";
+			dialogBox.innerHTML += "<p><span style='font-style: italic;'>Even with fear of his life</span></p>";
+			dialogBox.innerHTML += "<p><span style='font-style: italic;'>he could do nothing about</span></p>";
+			dialogBox.innerHTML += "<p><span style='font-style: italic;'>With that unberable pain</span></p>";
+			dialogBox.innerHTML += "<p><span style='font-style: italic;'>only fire could stop bloodstain</span></p>";
+			dialogBox.innerHTML += "<p><span class='button' onclick='next(); thomasLasky.alive = 30; thomasLasky.crippled = true;lightOff()'>He lost leg but gained <span style='color: #fc5f5f'>life</span></span></p>";
+			textObject = document.getElementsByTagName("p");
+			textObject[0].style.animation = "type "+(String(textObject[0]).length/10)*1+"s steps(60, end)";
+			index = 0;
+			textObject[index].addEventListener("animationend",kutas);
+		}
+
+	</script>
+</html>

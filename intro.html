@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html>
+	<head>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+		<meta charset="UTF-8">
+        <link rel="stylesheet" type="text/css" href="style/reset.css">
+		<link rel="stylesheet" type="text/css" href="style/crt.css">
+		<link rel="stylesheet" type="text/css" href="style/write.css">
+        <link rel="stylesheet" type="text/css" href="style/generalSequence.css">
+	</head>
+
+	<body onkeydown="skip(event)">
+        <!-- <audio loop autoplay>
+            <source src="393839__sicbm__synthmadnessv1.mp3" type="audio/mp3">
+        </audio> -->
+        <div style="width: 100vw; height: 100vh">
+            <p>The year was <span style="color: #0000fa">5000</span></p>
+            <p>In <span style="color: #0000fa">January</span> something with unmatched scale began</p>
+			<p><span style="color: #8b0000">The war</span></p>
+			<p>At first nobody realised importance of the situation</p>
+			<p>But soon, <span style="color: #8B4513">everyone</span> had to take their <span style="color: ##8b0000">part</span> in the conflict</p>
+			<br>
+			<p><span style="color: #ffd700">Second Commonwealth of All Nations</span></p>
+			<p>In short called <span style="color: #ffd700">All-Commonwealth</span></p>
+			<p>the greatest empire of the <span style="color: #8B4513">mankind</span>, was vast</p>
+			<p>First <span style="color: #0000fa">time</span> I heard about <span style="color: ##8b0000">The war</span></p>
+			<p>Was when <span style="color: #556B2F">military</span> knocked to my family house</p>
+			<p>And I was drafted into <span style="color: #556B2F">ground forces</span></p>
+			<br>
+			<p>In early <span style="color: #0000fa">October</span> we were taken on training</p>
+			<p><span style="color: #0000fa">One month</span> long</p>
+			<p>Shortened to <span style="color: #0000fa">twelve days<span></p>
+			<p>Ended after <span style="color: #0000fa">tree days<span></p>
+			<br>
+			<p>They gave me a <span style="color: #8b0000">special</span> task</p>
+			<p>Through my whole <span style="color: #fc5f5f"> life</span> I was a hunter, I hunted</p>
+			<p><span style="color: #fc5f5f">to survive</span></p>
+			<p>This cannot be harder</p>
+			<br>
+			<p><span style="color: #5ffcc7">Aliceland</span> awaits, and with it</p>
+			<p>something <span style="color: #8b0000">more</span></p>
+			<br>
+			<p><a href="chapter 1/sequence_1.html">Start</a></p>
+        </div>
+	</body>
+	<script>
+		function skip(key){
+			if(key.keyCode == 27)
+			{
+				textObject[index].style.display = "inline-block";
+				textObject[index].style.animation = 'typeEnd';
+			}
+		}
+		var textObject = document.getElementsByTagName("p");
+		textObject[0].style.animation = "type "+(String(textObject[0]).length/10)*1+"s steps(60, end)";
+		var index = 0;
+		function kutas(){
+		   index++;
+		   textObject[index].style.display = "inline-block";
+		   textObject[index].style.animation = "type "+(String(textObject[index]).length/10)*1+"s steps(60, end)";
+		   textObject[index].addEventListener("animationend",kutas);
+	   	}
+		textObject[index].addEventListener("animationend",kutas);
+	</script>
+</html>

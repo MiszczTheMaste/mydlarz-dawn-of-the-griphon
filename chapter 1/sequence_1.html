@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html>
+	<head>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+		<meta charset="UTF-8">
+        <link rel="stylesheet" type="text/css" href="../style/reset.css">
+		<link rel="stylesheet" type="text/css" href="../style/crt.css">
+		<link rel="stylesheet" type="text/css" href="../style/write.css">
+		<link rel="stylesheet" type="text/css" href="../style/generalSequence.css">
+	</head>
+
+	<body onkeydown="skip(event)">
+        <div id="dialogBox" style="width: 100vw; height: 100vh">
+			<p style="font-style: italic"><span style="color: #5ffcc7">Aliceland</span>, birthplace of the <span style="color: #ffd700"> First All-Commonwealth</span></p>
+			<p style="font-style: italic">Former grand metropolis is now a <span style="color: #8b0000">battlefield</span></p>
+			<p style="font-style: italic">It all began around <span style="color:#0000fa">4th of September</span> when</p>
+			<p style="font-style: italic"><span style="color: #CDAD00">Holy Elven Empire</span> wanted to take biggest water source in region</p>
+			<p style="font-style: italic"><span style="color: #ffd700">All-Commonwealth</span> was on edge of collapse</p>
+			<p style="font-style: italic">Giving up that planet was not an <span style="color: #8b0000">option</span></p>
+			<p><span class='button' onclick='next()'>For honor and humankind</span></p>
+        </div>
+	</body>
+	<script>
+		var dialogBox = document.querySelector("#dialogBox");
+		var textObject = document.getElementsByTagName("p");
+		textObject[0].style.animation = "type "+(String(textObject[0]).length/10)*1+"s steps(60, end)";
+		var index = 0;
+		function skip(key){
+			if(key.keyCode == 27)
+			{
+				textObject[index].style.display = "inline-block";
+				textObject[index].style.animation = 'typeEnd';
+			}
+		}
+		function kutas(){
+		   index++;
+		   textObject[index].style.display = "inline-block";
+		   textObject[index].style.animation = "type "+(String(textObject[index]).length/10)*1+"s steps(60, end)";
+		   textObject[index].addEventListener("animationend",kutas);
+	   	}
+		textObject[index].addEventListener("animationend",kutas);
+		function next()
+		{
+			dialogBox.innerHTML = "";
+			dialogBox.innerHTML += "<p>We arrived on <span style='color:#0000fa'>October 5th</span></p>";
+			dialogBox.innerHTML += "<p>It was evening</p>";
+			dialogBox.innerHTML += "<p>I wasn't sure, our spacecraft had no windows</p>";
+			dialogBox.innerHTML += "<p>Some say that the view when you enter the atmosphere</p>";
+			dialogBox.innerHTML += "<p>Is one of the most <span style='color: #7851a9'>beautiful</span></p>";
+			dialogBox.innerHTML += "<p><span class='button' onclick='next2()'>I wonder if it is true</span></p>"
+			textObject = document.getElementsByTagName("p");
+			textObject[0].style.animation = "type "+(String(textObject[0]).length/10)*1+"s steps(60, end)";
+			index = 0;
+			textObject[index].addEventListener("animationend",kutas);
+		}
+		function next2()
+		{
+			dialogBox.innerHTML = "";
+			dialogBox.innerHTML += "<p>We landed on ruined town square</p>";
+			dialogBox.innerHTML += "<p>Everyone quickly left the ship</p>";
+			dialogBox.innerHTML += "<p>Some of us tried to look at the <span style='color: #98FB98'>sky</span></p>";
+			dialogBox.innerHTML += "<p>But the great skycrapers overhelmed us</p>";
+			dialogBox.innerHTML += "<p><span class='button' onclick='next3()'>Is that how war looks like?</span></p>"
+			textObject = document.getElementsByTagName("p");
+			textObject[0].style.animation = "type "+(String(textObject[0]).length/10)*1+"s steps(60, end)";
+			index = 0;
+			textObject[index].addEventListener("animationend",kutas);
+		}
+		function next3()
+		{
+			dialogBox.innerHTML = "";
+			dialogBox.innerHTML += "<p>Commanders gave <span style='color: #FFFFE0'>orders</span> to their men</p>";
+			dialogBox.innerHTML += "<p>One of them stopped me and said:</p>";
+			dialogBox.innerHTML += "<p>- Hey you, sharpshooter</p>";
+			dialogBox.innerHTML += "<p>- Do you remember your <span style='color: #FFFFE0'>orders</span>?</p>";
+			dialogBox.innerHTML += "<p>I nodded</p>";
+			dialogBox.innerHTML += "<p>He said one more thing:</p>";
+			dialogBox.innerHTML += "<p>- <span style='color: #8b0000'>Good luck</span>, kid</p>";
+			dialogBox.innerHTML += "<p><span class='button' onclick='next4()'>...</span></p>"
+			textObject = document.getElementsByTagName("p");
+			textObject[0].style.animation = "type "+(String(textObject[0]).length/10)*1+"s steps(60, end)";
+			index = 0;
+			textObject[index].addEventListener("animationend",kutas);
+		}
+		function next4()
+		{
+			dialogBox.innerHTML = "";
+			dialogBox.innerHTML += "<p>I walked down one of the streets</p>";
+			dialogBox.innerHTML += "<br>";
+			dialogBox.innerHTML += "<p>My name is Alice Gryf</p>";
+			dialogBox.innerHTML += "<p>And this is story about</p>";
+			dialogBox.innerHTML += "<p><span style='color: #8b0000'>Unimportant people</span></p>";
+			dialogBox.innerHTML += "<p><a href='sequence_2.html'>Forward to my destiny</p>"
+			textObject = document.getElementsByTagName("p");
+			textObject[0].style.animation = "type "+(String(textObject[0]).length/10)*1+"s steps(60, end)";
+			index = 0;
+			textObject[index].addEventListener("animationend",kutas);
+		}
+	</script>
+</html>

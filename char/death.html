@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html>
+	<head>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+        <meta charset="UTF-8">
+        <link rel="stylesheet" type="text/css" href="../style/reset.css">
+		<link rel="stylesheet" type="text/css" href="../style/crt.css">
+		<link rel="stylesheet" type="text/css" href="../style/write.css">
+		<link rel="stylesheet" type="text/css" href="../style/generalSequence.css">
+		<script src="../char/traits.js"></script>
+        <style>
+            div > p{
+                color: #BFEFFF;
+            }
+        </style>
+	</head>
+
+	<body>
+        <div id="dialogBox" style="width: 100vw; height: 100vh">
+            <p>I feel strange</p>
+			<p>like really odd</p>
+            <p>never felt someting like that</p>
+            <p>Tired, so tired...</p>
+            <p>I want to fall asleep</p>
+            <p>Am I <span style="color:#8b0000">dying?</span></p>
+            <p>No just...</p>
+            <p>Darkness</p>
+            <p>my beloved one...</p>
+            <p>no...</p>
+			<p><a href='../index.html' style="font-style:italic">Eternity awaits</a></p>
+        </div>
+	</body>
+	<script>
+		var dialogBox = document.querySelector("#dialogBox");
+		var textObject = document.getElementsByTagName("p");
+		textObject[0].style.animation = "type "+(String(textObject[0]).length/10)*1+"s steps(60, end)";
+		var index = 0;
+		document.onkeypress = function (e) {
+			e = e || window.event;
+			if(e.keyCode == 27)
+			{
+				textObject[index].style.display = "inline-block";
+				textObject[index].style.animation = 'typeEnd';
+			}
+		};
+		function kutas(){
+		   index++;
+		   textObject[index].style.display = "inline-block";
+		   textObject[index].style.animation = "type "+(String(textObject[index]).length/10)*1+"s steps(60, end)";
+		   textObject[index].addEventListener("animationend",kutas);
+	   	}
+		textObject[index].addEventListener("animationend",kutas);
+	</script>
+</html>
